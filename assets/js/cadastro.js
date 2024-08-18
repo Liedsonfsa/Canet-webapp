@@ -2,10 +2,9 @@ $('#formulario-cadastro').on('submit', criarUsuario);
 
 function criarUsuario(evento) {
     evento.preventDefault();
-    console.log("aí papai");
 
     if($('#senha').val() != $('#confirmar-senha').val()){
-        alert("tá errado ô");
+        alert("Confirme a senha corretamente");
         return;
     }
 

@@ -3,9 +3,8 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
+	"webapp/src/models"
 	"webapp/src/responses"
 )
 
@@ -28,8 +27,18 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 		responses.JSON(w, http.StatusInternalServerError, responses.ErroAPI{Erro: err.Error()})
 		return
 	}
+	defer response.Body.Close()
 
-	token, _ := io.ReadAll(response.Body)
-	fmt.Println(response.StatusCode, response.Body, string(token))
+	if response.StatusCode >= 400 {
+		responses.TratarStatusCodeDeErro(w, response)
+		return
+	}
 
+	var datasAuthentication models.DatasAuthentication
+	if err := json.NewDecoder(response.Body).Decode(&datasAuthentication); err != nil {
+		responses.JSON(w, http.StatusUnprocessableEntity, responses.ErroAPI{Erro: err.Error()})
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, nil)
 }

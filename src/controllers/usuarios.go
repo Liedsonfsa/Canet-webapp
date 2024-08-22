@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"webapp/src/config"
 	"webapp/src/responses"
-	
 )
 
 // CriarUsuario chama a API para cadastrar um usuário no banco de dados
@@ -24,7 +25,8 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := http.Post("http://localhost:5000/usuarios", "application/json", bytes.NewBuffer(usuario))
+	url := fmt.Sprintf("%s/usuarios", config.APIURL)
+	response, err := http.Post(url, "application/json", bytes.NewBuffer(usuario))
 
 	if err != nil {
 		responses.JSON(w, http.StatusInternalServerError, responses.ErroAPI{Erro: err.Error()})

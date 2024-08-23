@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"webapp/src/config"
+	"webapp/src/cookies"
 	"webapp/src/models"
 	"webapp/src/responses"
 )
@@ -39,6 +40,11 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 
 	var datasAuthentication models.DatasAuthentication
 	if err := json.NewDecoder(response.Body).Decode(&datasAuthentication); err != nil {
+		responses.JSON(w, http.StatusUnprocessableEntity, responses.ErroAPI{Erro: err.Error()})
+		return
+	}
+
+	if err := cookies.Salvar(w, datasAuthentication.ID, datasAuthentication.Token); err != nil {
 		responses.JSON(w, http.StatusUnprocessableEntity, responses.ErroAPI{Erro: err.Error()})
 		return
 	}

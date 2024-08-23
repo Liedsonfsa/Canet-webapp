@@ -1,7 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"webapp/src/config"
+	"webapp/src/requests"
 	"webapp/src/utils"
 )
 
@@ -17,5 +20,8 @@ func CarregarPaginaDeCadastroDeUsuario(w http.ResponseWriter, r *http.Request) {
 
 // CarregarPaginaPrincipal carrega a página home do usuário
 func CarregarPaginaPrincipal(w http.ResponseWriter, r *http.Request) {
+	url := fmt.Sprintf("%s/publicacoes", config.APIURL)
+	response, err := requests.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
+	fmt.Println(response, err)
 	utils.ExecutarTemplate(w, "home.html", nil)
 }

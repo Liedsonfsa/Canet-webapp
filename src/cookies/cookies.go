@@ -14,6 +14,7 @@ func Configurar() {
 	s = securecookie.New(config.HashKey, config.BlockKey)
 }
 
+// Salvar registra as informações de autenticação
 func Salvar(w http.ResponseWriter, ID, token string) error {
 	dados := map[string]string {
 		"id": 		ID,
@@ -33,4 +34,20 @@ func Salvar(w http.ResponseWriter, ID, token string) error {
 	})
 
 	return nil
+}
+
+// Ler retorna os valores armazenados no cookie
+func Ler(r *http.Request) (map[string]string, error) {
+	cookie, err := r.Cookie("dados")
+	if err != nil {
+		return nil, err
+	}
+
+	valores := make(map[string]string)
+	if err = s.Decode("dados", cookie.Value, &valores); err != nil {
+		return nil, err
+	}
+
+
+	return valores, nil
 }

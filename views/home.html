@@ -8,6 +8,13 @@
 <body>
 
     <h2>Home page</h2>
+
+    {{ range . }}
+        <h4> {{ .Titulo }}</h4>
+        <h4>{{ .Conteudo }}</h4>
+        
+        <hr>
+    {{ end }}
     
 </body>
 </html>
